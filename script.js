@@ -17,7 +17,7 @@ const db = getFirestore(app);
 
 let cart = [];
 
-// ۱. لود کردن محصولات از فایربیس
+// ۱. لود کردن محصولات (اصلاح شده با نمایش عکس و موجودی)
 async function loadProducts() {
     const productsGrid = document.getElementById('productsGrid');
     if (!productsGrid) return;
@@ -27,11 +27,21 @@ async function loadProducts() {
     
     querySnapshot.forEach((doc) => {
         const product = doc.data();
+        // بررسی موجودی برای فعال/غیرفعال کردن دکمه
+        const isAvailable = product.stock > 0;
+        
         productsGrid.innerHTML += `
             <div class="product-card">
+                <img src="${product.image}" alt="${product.name}" style="width:100%; height:180px; object-fit:cover; border-radius:10px;">
                 <h3>${product.name}</h3>
-                <p>${product.price} تومان</p>
-                <button onclick="addToCart('${product.name}', ${product.price})">افزودن به سبد</button>
+                <p>قیمت: ${product.price} تومان</p>
+                <p style="color: ${isAvailable ? 'green' : 'red'}; font-weight: bold;">
+                    ${isAvailable ? 'موجودی: ' + product.stock + ' عدد' : 'ناموجود'}
+                </p>
+                <button ${isAvailable ? '' : 'disabled'} 
+                        onclick="addToCart('${product.name}', ${product.price})">
+                        ${isAvailable ? 'افزودن به سبد' : 'ناموجود'}
+                </button>
             </div>
         `;
     });
@@ -41,17 +51,18 @@ async function loadProducts() {
 window.addToCart = (name, price) => {
     cart.push({ name, price });
     updateCartUI();
-    alert(name + " به سبد اضافه شد!");
 };
 
 function updateCartUI() {
     const cartItems = document.getElementById('cartItems');
     const totalPrice = document.getElementById('totalPrice');
-    cartItems.innerHTML = cart.map(item => `<p>${item.name} - ${item.price} تومان</p>`).join('');
-    totalPrice.innerText = cart.reduce((sum, item) => sum + item.price, 0);
+    if (cartItems) {
+        cartItems.innerHTML = cart.map(item => `<p>${item.name} - ${item.price} تومان</p>`).join('');
+        totalPrice.innerText = cart.reduce((sum, item) => sum + item.price, 0);
+    }
 }
 
-// ۳. ثبت سفارش در دیتابیس (بخش اصولی)
+// ۳. ثبت سفارش در دیتابیس
 window.submitOrder = async () => {
     const customerName = document.getElementById('customerName').value;
     const customerPhone = document.getElementById('customerPhone').value;
@@ -67,12 +78,14 @@ window.submitOrder = async () => {
             customerName: customerName,
             customerPhone: customerPhone,
             items: cart,
-            totalPriceRials: parseInt(totalAmount) * 10, // تبدیل به ریال
+            totalPriceRials: parseInt(totalAmount) * 10,
             orderDate: new Date().toLocaleString('fa-IR'),
             status: "در انتظار پرداخت"
         });
-        
-        alert("سفارش شما ثبت شد! در حال انتقال به درگاه (مبلغ به ریال: " + (parseInt(totalAmount) * 10) + ")");
+        alert("سفارش شما با موفقیت ثبت شد!");
+        cart = []; // خالی کردن سبد بعد از ثبت
+        updateCartUI();
+        hideCheckoutForm();
     } catch (e) {
         console.error("خطا در ثبت:", e);
         alert("خطایی در ثبت سفارش رخ داد.");
