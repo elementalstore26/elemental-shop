@@ -1,0 +1,313 @@
+/* ==========================================================================
+   ۱. تنظیمات پایه و انیمیشن‌های پس‌زمینه
+   ========================================================================== */
+@import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Vazir', sans-serif;
+}
+
+body {
+    background: linear-gradient(-45deg, #ffc0cb, #b0e0e6, #e6e6fa, #c1ffc1);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    color: #2c3e50;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* ==========================================================================
+   ۲. هدر شیشه‌ای (Glassmorphism)
+   ========================================================================== */
+.header {
+    width: 92%;
+    margin: 15px auto;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    background: rgba(255, 255, 255, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08);
+    position: sticky;
+    top: 15px;
+    z-index: 100;
+    border-radius: 50px;
+    transition: all 0.4s ease;
+}
+
+.logo {
+    font-size: 30px;
+    font-weight: 900;
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 4px 10px rgba(255, 75, 43, 0.15);
+}
+
+.nav a {
+    text-decoration: none;
+    color: #4a4a4a;
+    margin: 0 15px;
+    font-weight: bold;
+    position: relative;
+    padding: 5px 0;
+    transition: color 0.3s ease;
+}
+
+.nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 0; height: 3px;
+    background: linear-gradient(45deg, #6a00ff, #ff007f);
+    border-radius: 5px;
+    transition: width 0.3s ease;
+}
+
+.nav a:hover::after, .nav a.active::after { width: 100%; }
+.nav a:hover, .nav a.active { color: #6a00ff; }
+
+.cart-btn {
+    background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.4));
+    border: 1px solid rgba(255,255,255,0.6);
+    font-size: 24px;
+    padding: 10px 14px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.cart-btn:hover {
+    transform: scale(1.15) rotate(-10deg);
+    background: white;
+    box-shadow: 0 8px 20px rgba(106, 0, 255, 0.2);
+}
+
+/* ==========================================================================
+   ۳. بخش هیرو و دسته‌بندی‌ها
+   ========================================================================== */
+.hero { animation: fadeUp 1.2s ease forwards; }
+
+.magic-title {
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 0 40px rgba(255,255,255,0.4);
+    animation: floatAnim 4s ease-in-out infinite;
+}
+
+.mini-box {
+    display: inline-block;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.mini-box:hover {
+    transform: translateY(-8px) scale(1.04);
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-color: #6a00ff !important;
+    color: #6a00ff !important;
+}
+
+@keyframes floatAnim {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   ۴. اصلاح ساختار کلی برای اجبار به چیدمان افقی در کل سایت
+   ========================================================================== */
+main, section, .products {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: block;
+    clear: both;
+}
+
+/* حل تداخل کلاس‌های با s و بدون s در کاتالوگ محصولات */
+.product-grid, .products-grid, #productsGrid {
+    display: flex !important;
+    flex-direction: row !important;      /* چیدمان کاملاً افقی */
+    flex-wrap: wrap !important;          /* رفتن به سطر بعدی در صورت کمبود جا */
+    justify-content: center !important;  /* وسط‌چین کردن کارت‌ها */
+    align-items: flex-start !important;
+    gap: 25px !important;
+    width: 100% !important;
+    max-width: 1200px !important;
+    margin: 30px auto !important;
+    padding: 10px;
+    box-sizing: border-box !important;
+}
+
+/* استایل کارت‌های محصول کاتالوگ */
+.product-card {
+    flex: 0 1 280px !important;         /* اندازه ثابت و استاندارد هر کارت در ردیف افقی */
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 30px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-sizing: border-box !important;
+}
+
+.product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(106, 0, 255, 0.15);
+}
+
+.product-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 20px;
+    margin-bottom: 15px;
+}
+
+.badge {
+    position: absolute;
+    top: 15px; left: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #6a00ff;
+}
+
+.product-card h3 { font-size: 18px; color: #2c3e50; margin-bottom: 10px; }
+.product-card .price { font-size: 17px; font-weight: bold; color: #ff1493; margin-bottom: 15px; }
+.card-buttons { display: flex; gap: 10px; }
+
+.view-btn {
+    flex: 1; background: #6a00ff; color: white;
+    text-decoration: none; text-align: center;
+    padding: 10px; border-radius: 15px; font-weight: bold;
+}
+.add-btn {
+    background: #ff007f; color: white; border: none;
+    padding: 10px 15px; border-radius: 15px; font-weight: bold; cursor: pointer;
+}
+
+/* ==========================================================================
+   ۵. صفحه جزئیات تک محصول (قرارگیری افقی عکس و متن)
+   ========================================================================== */
+#productContainer {
+    display: flex !important;
+    flex-direction: row !important;     /* عکس راست، متن چپ */
+    gap: 40px !important;
+    flex-wrap: wrap !important;
+    max-width: 900px !important;
+    margin: 50px auto !important;
+    padding: 40px;
+    background: rgba(255,255,255,0.4);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 40px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+    width: 100% !important;
+}
+
+.prod-img-side { flex: 1; min-width: 300px; }
+.prod-img-side img { width: 100%; border-radius: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
+.prod-info-side { flex: 1; min-width: 300px; display: flex; flex-direction: column; justify-content: center; gap: 20px; }
+.single-price { font-size: 26px; font-weight: 900; color: #ff1493; }
+.desc { color: #4a5568; line-height: 1.8; font-size: 16px; }
+
+/* ==========================================================================
+   ۶. سبد خرید کشویی کناری (سازگار با ساختار راست‌چین)
+   ========================================================================== */
+.cart-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(8px); display: none; z-index: 140;
+}
+
+.cart-panel {
+    position: fixed; top: 0; right: -380px; width: 380px; height: 100%;
+    background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); z-index: 150;
+    padding: 30px; box-shadow: -10px 0 40px rgba(0,0,0,0.15);
+    display: flex; flex-direction: column; border-radius: 30px 0 0 30px;
+    transition: right 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.cart-panel.active { right: 0; }
+.cart-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #eee; padding-bottom: 20px; }
+.cart-header h2 { font-weight: 900; color: #2c3e50; }
+.close-cart { background: none; border: none; font-size: 36px; cursor: pointer; color: #bbb; transition: color 0.2s; }
+.close-cart:hover { color: #ff416c; }
+#cartItems { flex: 1; overflow-y: auto; margin-top: 20px; }
+
+/* تک‌آیتم‌های داخل سبد */
+.cart-item { display: flex; align-items: center; gap: 15px; background: rgba(255, 255, 255, 0.6); padding: 10px; border-radius: 18px; margin-bottom: 12px; border: 1px solid #f0f0f0; }
+.cart-item img { width: 60px; height: 60px; object-fit: cover; border-radius: 12px; }
+.cart-item-info { flex: 1; }
+.cart-item-info h4 { font-size: 14px; color: #2c3e50; margin-bottom: 4px; }
+.cart-item-info span { font-size: 13px; color: #ff1493; font-weight: bold; }
+.qty-box { display: flex; align-items: center; background: #fff; border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden; }
+.qty-box button { background: none; border: none; width: 28px; height: 28px; cursor: pointer; font-weight: bold; font-size: 16px; }
+.qty-box button:hover { background: #f5f5f5; }
+.qty-box span { padding: 0 8px; font-weight: bold; font-size: 14px; }
+.remove-btn { background: none; border: none; color: #e74c3c; font-size: 20px; cursor: pointer; }
+.cart-footer { border-top: 2px dashed #eee; padding-top: 20px; }
+.total { font-size: 18px; font-weight: 900; margin-bottom: 20px; display: flex; justify-content: space-between; }
+
+.checkout-btn {
+    width: 100%; padding: 15px; background: linear-gradient(45deg, #6a00ff, #ff007f);
+    color: white; border: none; border-radius: 18px; font-size: 17px; font-weight: bold; cursor: pointer;
+    box-shadow: 0 8px 25px rgba(106, 0, 255, 0.25); transition: transform 0.2s;
+}
+.checkout-btn:hover { transform: translateY(-2px); }
+
+/* فرم خریدار */
+#checkoutFormSection input, #checkoutFormSection textarea {
+    width: 100%; padding: 12px; border: 1px solid rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.8); border-radius: 12px; margin-bottom: 5px; color: #2c3e50;
+}
+#checkoutFormSection input:focus, #checkoutFormSection textarea:focus { border-color: #ff1493; background: #fff; outline: none; }
+
+.footer { text-align: center; padding: 35px; background: rgba(255, 255, 255, 0.2); border-top: 1px solid rgba(255, 255, 255, 0.3); font-weight: bold; color: #555; margin-top: 60px; }
+
+/* ==========================================================================
+   ۷. کدهای ریسپانسیو اختصاصی موبایل
+   ========================================================================== */
+@media (max-width: 768px) {
+    .product-grid, .products-grid, #productsGrid {
+        gap: 15px !important;
+    }
+    .product-card {
+        flex: 0 1 calc(50% - 15px) !important; /* قرارگیری دو محصول در هر ردیف افقی در تبلت و موبایل‌های بزرگ */
+        min-width: 140px;
+        padding: 12px;
+        border-radius: 20px;
+    }
+    .product-card img { height: 150px; border-radius: 14px; }
+    .product-card h3 { font-size: 15px; }
+    .product-card .price { font-size: 14px; }
+    #productContainer { flex-direction: column !important; padding: 20px; margin: 20px auto !important; }
+    .cart-panel { width: 100%; right: -100%; border-radius: 0; }
+}
+
+@media (max-width: 480px) {
+    .product-card {
+        flex: 0 1 100% !important; /* سطر کامل افقی برای هر محصول در موبایل‌های بسیار کوچک */
+        max-width: 290px;
+    }
+}10:42 PM 6/19/2026

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>وضعیت پرداخت | المنتال</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+       (function(){
+          emailjs.init("YOUR_PUBLIC_KEY"); // کلید عمومی خودت را اینجا بگذار
+       })();
+    </script>
+</head>
+<body style="background: #f0f4f8; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+
+    <div class="verify-card" style="background: white; padding: 40px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: center; max-width: 400px; width: 100%;">
+        <div id="statusIcon" style="font-size: 70px; margin-bottom: 20px;">⏳</div>
+        <h2 id="statusTitle" style="color: #2c3e50; margin-bottom: 15px; font-weight: 900;">در حال بررسی وضعیت پرداخت...</h2>
+        <p id="statusDesc" style="color: #7f8c8d; line-height: 1.8; margin-bottom: 30px;">لطفاً از صفحه خارج نشوید.</p>
+        <a href="index.html" class="view-btn" style="display: inline-block; padding: 12px 30px; background: #6a00ff; color: white; border-radius: 15px; text-decoration: none; font-weight: bold; box-shadow: 0 5px 15px rgba(106, 0, 255, 0.2);">بازگشت به فروشگاه</a>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // شبیه‌سازی بازگشت از بانک (در واقعیت، بانک یک وضعیت به آدرس اضافه می‌کند، مثلاً ?status=success)
+            const urlParams = new URLSearchParams(window.location.search);
+            const paymentStatus = urlParams.get('status') || 'success'; // فعلاً فرض را روی موفق می‌گذاریم برای تست
+
+            const icon = document.getElementById("statusIcon");
+            const title = document.getElementById("statusTitle");
+            const desc = document.getElementById("statusDesc");
+
+            // دریافت سبد خرید و کاتالوگ محصولات از حافظه مرورگر
+            let cart = JSON.parse(localStorage.getItem("elementalCart")) || [];
+            let localProducts = JSON.parse(localStorage.getItem("localProducts")) || [];
+
+            if (paymentStatus === 'success' && cart.length > 0) {
+                // ۱. تغییر ظاهر صفحه به وضعیت موفقیت‌آمیز
+                icon.innerText = "🦄";
+                title.innerText = "پرداخت با موفقیت انجام شد!";
+                title.style.color = "#2ecc71";
+                desc.innerText = "سفارش شما ثبت شد و کادر جادویی المنتال در حال آماده‌سازی آن است. فاکتور به مدیریت ارسال شد. ✨";
+
+                // ۲. کم کردن موجودی انبار (Deduct Stock)
+                cart.forEach(cartItem => {
+                    let product = localProducts.find(p => p.id === cartItem.id);
+                    if (product) {
+                        // اگر فیلد موجودی (count) نداشت، پیش‌فرض مثلاً ۲۰ تا در نظر بگیرد
+                        if (product.count === undefined) product.count = 20; 
+                        
+                        product.count = product.count - cartItem.qty; // کسر موجودی
+                        if (product.count < 0) product.count = 0; // جلوگیری از منفی شدن انبار
+                    }
+                });
+                // ذخیره کاتالوگ جدید در مرورگر
+                localStorage.setItem("localProducts", JSON.stringify(localProducts));
+
+                // ۳. ساخت متن فاکتور و ارسال به جیمیل تو (توسط EmailJS)
+                let emailMessage = `✅ پرداخت موفق و کسر از انبار ✅\n\n`;
+                emailMessage += `📦 اقلام خریداری شده:\n`;
+                cart.forEach((item, index) => {
+                    emailMessage += `${index + 1}. ${item.name} | تعداد: ${item.qty} عدد\n`;
+                });
+
+                const templateParams = {
+                    name: "مشتری المنتال",
+                    message: emailMessage
+                };
+
+                // ارسال ایمیل
+                emailjs.send('YOUR_SERVICE_ID', 'template_ow5ebug', templateParams)
+                    .then(() => console.log("Email sent successfully!"))
+                    .catch(err => console.error("Email failed:", err));
+
+                // ۴. خالی کردن سبد خرید چون خرید تمام شده است
+                localStorage.removeItem("elementalCart");
+
+            } else if (cart.length === 0) {
+                icon.innerText = "🔮";
+                title.innerText = "سفارش قبلاً پردازش شده است";
+                desc.innerText = "سبد خرید شما خالی است یا این سفارش قبلاً ثبت شده است.";
+            } else {
+                // وضعیت خطا در پرداخت
+                icon.innerText = "☄️";
+                title.innerText = "پرداخت ناموفق بود!";
+                title.style.color = "#e74c3c";
+                desc.innerText = "متأسفانه تراکنش انجام نشد. پول از حساب شما کسر نشده است. در صورت کسر، تا ۷۲ ساعت باز می‌گردد.";
+            }
+        });
+    </script>
+</body>
+</html>

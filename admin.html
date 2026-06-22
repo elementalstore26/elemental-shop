@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پنل مدیریت جادویی | المنتال</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .admin-container { max-width: 1200px; margin: 40px auto; padding: 30px; background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(20px); border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: 0 15px 35px rgba(0,0,0,0.05); }
+        .admin-grid { display: flex; gap: 30px; flex-wrap: wrap; margin-top: 25px; }
+        .admin-card { flex: 1; min-width: 320px; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.02); }
+        .admin-card h3 { margin-bottom: 20px; color: #6a00ff; border-bottom: 2px dashed #eee; padding-bottom: 10px; font-weight: 800; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: bold; color: #555; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 12px; font-size: 14px; outline: none; transition: border 0.2s; font-family: inherit; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #6a00ff; }
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; text-align: right; }
+        th, td { padding: 14px; border-bottom: 1px solid #eee; }
+        th { background-color: #f8f9fa; color: #2c3e50; font-weight: 800; }
+        .btn-success { background: linear-gradient(45deg, #2ecc71, #27ae60); color: white; border: none; padding: 14px 25px; border-radius: 12px; cursor: pointer; font-weight: bold; width: 100%; box-shadow: 0 5px 15px rgba(46, 204, 113, 0.2); transition: transform 0.2s; }
+        .btn-success:hover { transform: translateY(-2px); }
+        .btn-delete { background: #e74c3c; color: white; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: background 0.2s; }
+        .btn-delete:hover { background: #c0392b; }
+        .btn-clear-local { background: #e67e22; color: white; border: none; padding: 10px 15px; border-radius: 12px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 15px; transition: background 0.2s; }
+        .btn-clear-local:hover { background: #d35400; }
+        .img-preview { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo">Elemental Admin</div>
+        <nav class="nav"><a href="index.html">← بازگشت به سایت</a></nav>
+    </header>
+
+    <main class="admin-container">
+        <h2 style="font-weight: 900;">✨ پنل مدیریت المنتال</h2>
+        <p style="color: #7f8c8d; margin-top: 5px;">محصولات جدید را به همراه توضیحات اختصاصی و تعداد انبار به کاتالوگ اضافه کنید.</p>
+
+        <div class="admin-grid">
+            <div class="admin-card">
+                <h3>➕ افزودن محصول جدید</h3>
+                <form id="addProductForm" onsubmit="addNewProductManual(event)">
+                    <div class="form-group">
+                        <label>نام محصول:</label>
+                        <input type="text" id="prodName" required placeholder="مثال: عروسک خرگوش پاستلی">
+                    </div>
+                    <div class="form-group">
+                        <label>قیمت (تومان):</label>
+                        <input type="number" id="prodPrice" required placeholder="مثال: 185000">
+                    </div>
+                    <div class="form-group">
+                        <label>موجودی اولیه انبار (عدد):</label>
+                        <input type="number" id="prodCount" required min="1" placeholder="مثال: 20">
+                    </div>
+                    <div class="form-group">
+                        <label>دسته‌بندی:</label>
+                        <select id="prodCategory">
+                            <option value="عروسک">🧸 عروسک</option>
+                            <option value="فیجت">🔮 فیجت</option>
+                            <option value="کادویی">🎁 کادویی</option>
+                            <option value="اسباب‌بازی">🧩 اسباب‌بازی</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>مسیر تصویر:</label>
+                        <input type="text" id="prodImage" required placeholder="مثال: images/doll1.jpg">
+                    </div>
+                    <div class="form-group">
+                        <label>توضیحات محصول:</label>
+                        <textarea id="prodDesc" rows="4" required placeholder="توضیحات جادویی این محصول را بنویسید..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-success">🚀 انتشار در ویترین فروشگاه</button>
+                </form>
+                
+                <button onclick="clearOldLocalProducts()" class="btn-clear-local">🧹 پاکسازی کامل محصولات قدیمی مرورگر</button>
+            </div>
+
+            <div class="admin-card" style="flex: 1.5;">
+                <h3>📦 مدیریت و حذف محصولات موجود</h3>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>تصویر</th>
+                                <th>نام محصول</th>
+                                <th>دسته‌بندی</th>
+                                <th>موجودی انبار</th>
+                                <th>قیمت</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminProductsTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBP93iYJYRhnHgtzCmoEE2Np5--lMLH5T8",
+            authDomain: "elemental-shop.firebaseapp.com",
+            projectId: "elemental-shop",
+            storageBucket: "elemental-shop.firebasestorage.app",
+            messagingSenderId: "501363613031",
+            appId: "1:501363613031:web:b2fb2e9097c425d60923c2",
+            measurementId: "G-GKXC40ZQC5"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        function loadAdminProducts() {
+            const tableBody = document.getElementById("adminProductsTable");
+            tableBody.innerHTML = "<tr><td colspan='6' style='text-align:center;'>در حال بارگذاری کاتالوگ ابری...</td></tr>";
+
+            db.collection("products").orderBy("createdAt", "desc").onSnapshot((querySnapshot) => {
+                tableBody.innerHTML = "";
+                if (querySnapshot.empty) {
+                    tableBody.innerHTML = "<tr><td colspan='6' style='text-align:center;'>هیچ محصولی در ویترین ابری یافت نشد.</td></tr>";
+                    return;
+                }
+
+                querySnapshot.forEach((doc) => {
+                    const product = doc.data();
+                    const docId = doc.id;
+
+                    const row = `
+                        <tr>
+                            <td><img src="${product.image}" class="img-preview" onerror="this.src='https://placehold.co/50'"></td>
+                            <td><strong>${product.name}</strong></td>
+                            <td>${product.category}</td>
+                            <td>${product.count} عدد</td>
+                            <td>${Number(product.price).toLocaleString()} تومان</td>
+                            <td>
+                                <button class="btn-delete" onclick="deleteProductFromCloud('${docId}')">حذف</button>
+                            </td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += row;
+                });
+            });
+        }
+
+        async function addNewProductManual(event) {
+            event.preventDefault();
+            const name = document.getElementById("prodName").value;
+            const price = document.getElementById("prodPrice").value;
+            const count = document.getElementById("prodCount").value;
+            const category = document.getElementById("prodCategory").value;
+            const image = document.getElementById("prodImage").value;
+            const desc = document.getElementById("prodDesc").value;
+
+            try {
+                await db.collection("products").add({
+                    name: name,
+                    price: price,
+                    count: count,
+                    category: category,
+                    image: image,
+                    desc: desc,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                alert("🚀 محصول جدید با موفقیت به ویترین ابری اضافه شد!");
+                document.getElementById("addProductForm").reset();
+            } catch (error) {
+                console.error("خطا در ثبت محصول: ", error);
+                alert("مشکلی در اتصال به دیتابیس ابری رخ داد.");
+            }
+        }
+
+        async function deleteProductFromCloud(id) {
+            if (confirm("آیا از حذف این محصول از روی سرورهای ابری مطمئن هستید؟")) {
+                try {
+                    await db.collection("products").doc(id).delete();
+                    alert("محصول با موفقیت حذف شد.");
+                } catch (error) {
+                    console.error("خطا در حذف محصول: ", error);
+                    alert("حذف محصول ناموفق بود.");
+                }
+            }
+        }
+
+        // تابع اختصاصی برای پاک کردن حافظه قدیمی مرورگر شما
+        function clearOldLocalProducts() {
+            if(confirm("آیا مطمئن هستید که می‌خواهید تمام محصولات قدیمی ذخیره شده روی مرورگر را پاک کنید؟")) {
+                localStorage.clear();
+                alert("🧹 حافظه محلی با موفقیت تخلیه شد! صفحه مجدداً بارگذاری می‌شود.");
+                location.reload();
+            }
+        }
+
+        window.onload = loadAdminProducts;
+    </script>
+</body>
+</html>
