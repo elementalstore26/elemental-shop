@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ارتباط با ما | فروشگاه المنتال</title>
+    <!-- فراخوانی آیکون‌ها -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .contact-list { list-style: none; padding: 0; max-width: 400px; margin: 30px auto; text-align: right; }
+        .contact-list li { margin: 20px 0; font-size: 16px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .contact-list i { width: 25px; color: #6a00ff; font-size: 20px; }
+        a { text-decoration: none; color: #333; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">Elemental</div>
+        <nav class="nav">
+            <a href="index.html">خانه</a>
+            <a href="about.html">درباره ما</a>
+            <a href="contact.html" class="active">ارتباط با ما</a>
+        </nav>
+    </header>
+
+    <main style="padding: 50px 20px; text-align: center;">
+        <h1>تماس با ما</h1>
+        <p>برای پیگیری سفارشات یا سوالات می‌توانید از روش‌های زیر با ما در تماس باشید:</p>
+        
+        <ul class="contact-list">
+            <li><i class="fas fa-envelope"></i> ایمیل: elementalstore26@gmail.com</li>
+            <li><i class="fab fa-instagram"></i> اینستاگرام: <a href="https://instagram.com/elemental_26" target="_blank">@elemental_26</a></li>
+            <li><i class="fab fa-telegram"></i> تلگرام: <a href="https://t.me/Elemental26" target="_blank">@Elemental26</a></li>
+            <li><i class="fas fa-phone-alt"></i> شماره تماس: <a href="tel:09183981449">09183981449</a></li>
+            <li><i class="fas fa-map-marker-alt"></i> آدرس: دهگلان، خیابان استقلال، مجتمع نیازی، طبقه اول، واحد 40</li>
+        </ul>
+    </main>
+</body>
+</html>
