@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>فروشگاه المنتال | فروشگاه عروسک و اسباب بازی</title>
-    <meta name="description" content="بهترین و باکیفیت‌ترین عروسک‌ها، اسباب‌بازی‌ها و فیجت‌ها را از آنلاین شاپ المنتال خرید کنید.">
+    <title>فروشگاه جادویی المنتال | خانه</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,6 +12,9 @@
         <div class="logo">Elemental</div>
         <nav class="nav">
             <a href="index.html" class="active">خانه</a>
+            <a href="products.html">محصولات</a>
+            <a href="about.html">درباره ما</a>
+            <a href="contact.html">ارتباط با ما</a>
         </nav>
         <div class="header-icons">
             <button class="cart-btn" aria-label="سبد خرید">🛒</button>
@@ -21,25 +23,30 @@
 
     <main>
         <section class="hero" style="text-align: center; padding: 60px 20px; background: linear-gradient(135deg, #6a00ff, #ff007f); color: white; border-radius: 0 0 40px 40px; margin-bottom: 40px;">
-            <h1 class="magic-title">المنتال، جادویی‌ترین گوشه‌ی شهر</h1>
-            <p>دنیایی از عروسک‌ها و فیجت‌های کیوت پاستلی</p>
+            <h1 class="magic-title" style="font-size: 38px; font-weight: 900; margin-bottom: 15px;">المنتال، جادویی‌ترین گوشه‌ی شهر</h1>
+            <p style="font-size: 18px; opacity: 0.9; margin-bottom: 25px;">دنیایی از عروسک‌ها و فیجت‌های کیوت پاستلی</p>
+            <a href="products.html" class="cta-btn" style="display: inline-block; background: white; color: #6a00ff; padding: 12px 30px; border-radius: 15px; text-decoration: none; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">دیدن همه محصولات</a>
         </section>
 
         <section class="quick-categories" style="padding: 0 8%; text-align: center; margin-bottom: 40px;">
             <h2 style="margin-bottom: 20px; font-weight: 800; color: #2c3e50;">دسته‌بندی‌های محبوب</h2>
             <div class="cat-grid" style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                
                 <a href="products.html?cat=عروسک" class="mini-box" style="background: white; padding: 15px; border-radius: 20px; text-decoration: none; color: #333; font-weight: bold; border: 1px solid #eee; display: flex; flex-direction: column; align-items: center; gap: 10px; width: 140px;">
                     <img src="images/doll.png" alt="عروسک" style="width: 60px; height: 60px; object-fit: contain;">
                     <span>عروسک</span>
                 </a>
+
                 <a href="products.html?cat=فیجت" class="mini-box" style="background: white; padding: 15px; border-radius: 20px; text-decoration: none; color: #333; font-weight: bold; border: 1px solid #eee; display: flex; flex-direction: column; align-items: center; gap: 10px; width: 140px;">
                     <img src="images/fidget.png" alt="فیجت" style="width: 60px; height: 60px; object-fit: contain;">
                     <span>فیجت</span>
                 </a>
+
                 <a href="products.html?cat=کادویی" class="mini-box" style="background: white; padding: 15px; border-radius: 20px; text-decoration: none; color: #333; font-weight: bold; border: 1px solid #eee; display: flex; flex-direction: column; align-items: center; gap: 10px; width: 140px;">
                     <img src="images/gift.png" alt="کادویی" style="width: 60px; height: 60px; object-fit: contain;">
                     <span>کادویی</span>
                 </a>
+
                 <a href="products.html?cat=اسباب‌بازی" class="mini-box" style="background: white; padding: 15px; border-radius: 20px; text-decoration: none; color: #333; font-weight: bold; border: 1px solid #eee; display: flex; flex-direction: column; align-items: center; gap: 10px; width: 140px;">
                     <img src="images/toy.png" alt="اسباب‌بازی" style="width: 60px; height: 60px; object-fit: contain;">
                     <span>اسباب‌بازی</span>
@@ -53,12 +60,15 @@
         </section>
     </main>
 
+    <footer class="footer" style="text-align: center; padding: 30px; margin-top: 50px; border-top: 1px solid #eee; color: #7f8c8d;">
+        <p>&copy; ۲۰۲۶ فروشگاه المنتال. ساخته شده با عشق 💜</p>
+    </footer>
+
     <aside id="cartPanel" class="cart-panel">
         <div class="cart-header">
             <h2>سبد خرید شما</h2>
             <button class="close-cart">×</button>
         </div>
-        
         <div id="cartMainSection">
             <div id="cartItems"></div>
             <div class="cart-footer">
@@ -66,16 +76,19 @@
                 <button class="checkout-btn" onclick="showCheckoutForm()">💳 رفتن به مرحله پرداخت</button>
             </div>
         </div>
-
-        <div id="checkoutFormSection" style="display: none; padding: 25px;">
-            <h3>📋 مشخصات تحویل‌گیرنده</h3>
-            <input type="text" id="customerName" placeholder="نام و نام خانوادگی">
-            <input type="tel" id="customerPhone" placeholder="شماره موبایل">
-            <button class="checkout-btn" onclick="submitOrder()" style="background:#2ecc71;">🚀 ثبت نهایی و پرداخت</button>
-            <button onclick="hideCheckoutForm()" style="background:none; border:none; color:#7f8c8d; cursor:pointer;">← بازگشت</button>
+        <div id="checkoutFormSection" style="display: none; padding: 25px; color: #2c3e50;">
+            <h3 style="margin-bottom: 20px; color: #ff007f;">📋 مشخصات تحویل‌گیرنده</h3>
+            <div style="display:flex; flex-direction:column; gap:15px;">
+                <input type="text" id="customerName" placeholder="نام و نام خانوادگی">
+                <input type="tel" id="customerPhone" placeholder="شماره موبایل">
+                <textarea id="customerAddress" placeholder="آدرس دقیق پستی جهت ارسال" rows="3" style="resize:none;"></textarea>
+                <button class="checkout-btn" onclick="redirectToGateway()" style="background:#2ecc71; margin-top:10px;">🚀 اتصال به درگاه بانکی و پرداخت</button>
+                <button onclick="hideCheckoutForm()" style="background:none; border:none; color:#7f8c8d; cursor:pointer; font-size:14px; margin-top:5px;">← بازگشت به سبد خرید</button>
+            </div>
         </div>
     </aside>
 
-    <script type="module" src="script.js"></script>
+    <div id="cartOverlay" class="cart-overlay"></div>
+    <script src="script.js"></script>
 </body>
 </html>
